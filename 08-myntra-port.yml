@@ -1,0 +1,67 @@
+---
+- name: Update web servers
+  hosts: centos
+  become: yes
+
+  tasks:
+  - name: Ensure git is present
+    package:
+      name: git
+      state: present
+
+  - name: Ensure web server is installed
+    package:
+      name: httpd
+      state: present
+
+  - name: SELinux Permissive
+    selinux:
+      policy: targeted
+      state: permissive
+
+  - name: Ensure web server is started
+    service:
+      name: httpd
+      state: started
+    notify:
+    - Ensure Site
+
+  - name: Ensure web server is enabled
+    service:
+      name: httpd
+      enabled: yes
+
+  - name: Modify Port
+    copy:
+      src: httpd.conf
+      dest: /etc/httpd/conf/httpd.conf
+    notify:
+    - Restart HTTPD
+
+  - name: Update PHP app
+    copy:
+      src: date.php
+      dest: /var/www/html/date.php
+
+  - name: Ensure PHP is present
+    package:
+      name: php
+      state: present
+    notify:
+    - Restart HTTPD
+
+
+  handlers:
+  - name: Ensure Site
+    git:
+      repo: https://github.com/clairejoseph0103/ecomm.git
+      dest: /var/www/html
+
+  - name: Restart HTTPD
+    service:
+      name: httpd
+      state: restarted
+
+
+...
+

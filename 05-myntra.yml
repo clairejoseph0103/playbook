@@ -1,0 +1,18 @@
+---
+- name: update web servers
+  hosts: all
+  become: yes
+  tasks:
+
+  - name: install git
+    package:
+      name: git
+      state: present
+
+  - name: ensure site
+    git:
+      repo: https://github.com/clairejoseph0103/ecomm.git
+      dest: /var/www/html
+
+
+...

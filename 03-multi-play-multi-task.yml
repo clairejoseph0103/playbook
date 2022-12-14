@@ -1,0 +1,46 @@
+---
+- name: update web servers
+  hosts: web
+
+  tasks:
+  - name: ensure web directory is created
+    file:
+      path: /home/centos/web
+      state: directory 
+
+  - name: ensure new file is created
+    copy:
+      dest: /home/centos/web/new.html
+      content: NEW HTML PAGE DEMO
+
+- name: update app servers
+  hosts: app
+
+  tasks:
+  - name: ensure web directory is created
+    file:
+      path: /home/centos/web
+      state: directory
+
+  - name: ensure new file is created
+    copy:
+      dest: /home/centos/web/new_app.html
+      content: NEW HTML PAGE APP
+
+- name: update web servers
+  hosts: all
+
+  tasks:
+  - name: ensure web directory is created
+    file:
+      path: /home/centos/common
+      state: directory
+
+  - name: ensure new file is created
+    get_url:
+      dest: /home/centos/common
+      url: https://raw.githubusercontent.com/ravi2krishna/apache/master/httpd.conf
+
+
+...
+
