@@ -1,0 +1,9 @@
+---
+- name: Update web servers
+  hosts: centos
+  become: yes
+  roles:
+    - apache_role
+
+...
+

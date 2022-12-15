@@ -1,0 +1,9 @@
+---
+# tasks file for apache_role
+
+- import_tasks: install.yml
+- import_tasks: configure.yml
+
+...
+
+
